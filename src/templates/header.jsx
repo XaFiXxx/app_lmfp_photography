@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../AuthContext'; // Importer le hook d'authentification
 import bannerImage from '../img/front/BannierreHeader.png'; 
 import userIcon from '../img/front/user_icon.png';
 import logoFront from '../img/front/logo_front2.png';
@@ -12,6 +13,7 @@ const categories = [
 
 function Header() {
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth(); // Utiliser l'authentification
 
   const isActive = (path) => {
     return location.pathname === path ? 'text-orange-500' : 'text-gray-100 hover:text-orange-500';
@@ -59,23 +61,25 @@ function Header() {
                     ))}
                   </ul>
                 </li>
-                <li>
-                  <Link to="/login" className="text-gray-100 hover:text-orange-500 ml-8">Connexion</Link>
-                </li>
-                <li className="relative">
-                  <Link to="#" onClick={toggleDropdownMenu} className="block ml-8">
-                    <img src={userIcon} alt="Profil" className="w-10 h-10 rounded-full" />
-                  </Link>
-                  <div id="profile-dropdown" className="hidden absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                    <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</Link>
-                    <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
-                    <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => {
-                      // Handle logout logic here
-                    }}>
-                      Se déconnecter
+                {!isAuthenticated && (
+                  <li>
+                    <Link to="/login" className="text-gray-100 hover:text-orange-500 ml-8">Connexion</Link>
+                  </li>
+                )}
+                {isAuthenticated && (
+                  <li className="relative">
+                    <Link to="#" onClick={toggleDropdownMenu} className="block ml-8">
+                      <img src={userIcon} alt="Profil" className="w-10 h-10 rounded-full" />
                     </Link>
-                  </div>
-                </li>
+                    <div id="profile-dropdown" className="hidden absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</Link>
+                      <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
+                      <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={logout}>
+                        Se déconnecter
+                      </Link>
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
