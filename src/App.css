@@ -1,0 +1,15 @@
+/* .header-background {
+    background: url('/img/front/BannierreHeader.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    margin-top: -8px;
+  } */
+  
+  .header-background::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: rgba(0, 0, 0, 0.9); /* Noir semi-transparent */
+    z-index: -1;
+  }
+  
